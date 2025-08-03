@@ -1,14 +1,17 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router'; 
+import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './pages/login/login.component';
 import { IndexComponent } from './pages/index/index.component';
+import { RegisterAdminComponent } from './pages/register-admin/register-admin.component';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/index', pathMatch: 'full' }, // Redirect empty path to index
   { path: 'index', component: IndexComponent },
+  { path: 'register', component: RegisterAdminComponent },
+
   { path: 'login', component: LoginComponent },
-  { path: '**', redirectTo: '/index' }  
+  { path: '**', redirectTo: '/index' },
+
 ];
 
 @NgModule({

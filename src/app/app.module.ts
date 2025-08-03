@@ -21,6 +21,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.intercepter';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { RegisterAdminComponent } from './pages/register-admin/register-admin.component';
    @NgModule({
   declarations: [
     AppComponent,
@@ -28,6 +29,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     LoginComponent,
       IndexComponent,
       HeaderComponent,
+      RegisterAdminComponent,
     
          
   ],
