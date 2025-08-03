@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
  import { Utilisateur } from '../../monClass/utilisateur';
     import { AdminService } from '../../monService/admin.service';
  import { AdminAuthService } from '../../monService/admin-auth.service';
-import { Specialite } from 'src/app/monClass/Specialitet';
 import { RoleUtilisateur } from 'src/app/monClass/Roles';
  
 @Component({

@@ -1,5 +1,4 @@
 import { RoleUtilisateur } from "./Roles";
-import { Specialite } from "./Specialitet";
 
  
 export class Utilisateur {
