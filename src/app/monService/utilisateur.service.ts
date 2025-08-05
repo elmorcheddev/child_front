@@ -1,5 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Utilisateur } from '../monClass/utilisateur';
 
@@ -7,17 +7,32 @@ import { Utilisateur } from '../monClass/utilisateur';
   providedIn: 'root'
 })
 export class UtilisateurService {
- 
-  URL="https://childrengard.onrender.com/api/utilisateur"
-  constructor(private http:HttpClient) { }
- 
-   
- 
-  inscriptionAdmin(admin: Utilisateur) :Observable<Utilisateur>{
-    return this.http.post<Utilisateur>(`${this.URL+"/ajouterSuperAdmin"}`, admin)
+  private apiUrl = 'https://childrengard.onrender.com/api/utilisateur';
 
-   }
-  
-   
- 
+  constructor(private http: HttpClient) {}
+
+  // Récupérer tous les utilisateurs
+  getAll(): Observable<Utilisateur[]> {
+    return this.http.get<Utilisateur[]>(`${this.apiUrl}/all`);
+  }
+
+  // Récupérer un utilisateur par ID
+  getById(id: number): Observable<Utilisateur> {
+    return this.http.get<Utilisateur>(`${this.apiUrl}/byId/${id}`);
+  }
+
+  // Créer un nouvel utilisateur
+  create(utilisateur: Utilisateur): Observable<Utilisateur> {
+    return this.http.post<Utilisateur>(`${this.apiUrl}/create`, utilisateur);
+  }
+
+  // Mettre à jour un utilisateur existant
+  update(id: number, utilisateur: Utilisateur): Observable<Utilisateur> {
+    return this.http.put<Utilisateur>(`${this.apiUrl}/update/${id}`, utilisateur);
+  }
+
+  // Supprimer un utilisateur
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/delete/${id}`);
+  }
 }

@@ -1,0 +1,147 @@
+<div class="page-header">
+    <div class="page-title">
+        <h4>Liste des Educateurs</h4>
+        <h6>Voir / Rechercher Educateurs</h6>
+    </div>
+    <div class="page-btn">
+        <a class="btn btn-added" data-bs-toggle="modal" data-bs-target="#exampleModalLong">
+            <img src="assets/img/icons/plus.svg" class="me-1" alt="img">Ajouter Educateur
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-top">
+            <div class="search-set">
+                <div class="search-path">
+                    <a class="btn btn-filter" id="filter_search">
+                        <img src="assets/img/icons/filter.svg" alt="img">
+                        <span><img src="assets/img/icons/closes.svg" alt="img"></span>
+                    </a>
+                </div>
+                <div class="search-input">
+                    <a class="btn btn-searchset"><img src="assets/img/icons/search-white.svg" alt="img"></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table datanew">
+                <thead>
+                    <tr>
+                        <th>Nom et Prénom</th>
+                        <th>Adresse</th>
+                        <th>Téléphone</th>
+                        <th>CIN</th>
+                        <th>Date de Naissance</th>
+                        <th>Email</th>
+                        <th>Statut</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let e of applyFilter()">
+                        <td>{{ e.nom + ' ' + e.prenom }}</td>
+                        <td>{{ e.adresse }}</td>
+                        <td>{{ e.tel }}</td>
+                        <td>{{ e.cin }}</td>
+                        <td>{{ e.dateNaissance }}</td>
+                        <td>{{ e.email }}</td>
+                        <td>
+                            <span *ngIf="!e.etat" style="color: red;">DÉSACTIVÉ</span>
+                            <span *ngIf="e.etat" style="color: green;">ACTIVÉ</span>
+                        </td>
+                        <td>
+                            <a class="me-3" href="javascript:void(0);" (click)="editEducateur(e)">
+                                <img src="assets/img/icons/edit.svg" alt="img">
+                            </a>
+                            <a class="me-3 confirm-text" href="javascript:void(0);" (click)="deleteEducateur(e.id)">
+                                <img src="assets/img/icons/delete.svg" alt="img">
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Ajout Educateur -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajouter un Educateur</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+                <form #form="ngForm" (ngSubmit)="ajouterEducateur(form)">
+                    <div class="row">
+                        <!-- Photo si nécessaire -->
+                        <div class="col-lg-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Photo</label>
+                                <input type="file" class="form-control" name="image" (change)="onFileSelected($event)">
+                            </div>
+                        </div>
+                        <!-- Nom -->
+                        <div class="col-lg-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Nom</label>
+                                <input type="text" [(ngModel)]="educateur.nom" name="nom" class="form-control" required>
+                            </div>
+                        </div>
+                        <!-- Prénom -->
+                        <div class="col-lg-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Prénom</label>
+                                <input type="text" [(ngModel)]="educateur.prenom" name="prenom" class="form-control" required>
+                            </div>
+                        </div>
+                        <!-- Email -->
+                        <div class="col-lg-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" [(ngModel)]="educateur.email" name="email" class="form-control" required>
+                            </div>
+                        </div>
+                        <!-- Téléphone -->
+                        <div class="col-lg-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Téléphone</label>
+                                <input type="text" [(ngModel)]="educateur.tel" name="tel" class="form-control">
+                            </div>
+                        </div>
+                        <!-- Adresse -->
+                        <div class="col-lg-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Adresse</label>
+                                <input type="text" [(ngModel)]="educateur.adresse" name="adresse" class="form-control">
+                            </div>
+                        </div>
+                        <!-- CIN -->
+                        <div class="col-lg-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>CIN</label>
+                                <input type="text" [(ngModel)]="educateur.cin" name="cin" class="form-control">
+                            </div>
+                        </div>
+                        <!-- Date de naissance -->
+                        <div class="col-lg-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Date de Naissance</label>
+                                <input type="date" [(ngModel)]="educateur.dateNaissance" name="dateNaissance" class="form-control">
+                            </div>
+                        </div>
+                        <!-- Boutons -->
+                        <div class="col-lg-12">
+                            <button type="submit" class="btn btn-primary me-2">Ajouter</button>
+                            <button type="reset" class="btn btn-danger" (click)="resetForm(form)">Annuler</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

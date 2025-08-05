@@ -38,17 +38,7 @@ export class RegisterAdminComponent implements OnInit{
   
   inscriptionAdmin(form:NgForm){
     
-    this.utilisateurService.inscriptionAdmin(this.admin).subscribe((data:Utilisateur)=>{
-      console.log(data)
-        if(data!=null){
-          alert("Inscription    with Success")
-          this.router.navigate(['/login'])
-        }else{
-          alert("there is account SUPER  ADMIN exsit")
-          this.router.navigate(['/login'])
-
-        }
-    })
+  
   }
  
    
