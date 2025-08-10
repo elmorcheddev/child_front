@@ -33,7 +33,6 @@ export class HeaderComponent implements OnInit {
       
     if(this.authAdmin.isLoggedIn() && this.authAdmin.getCurrentUser()!=null){
       this.adminService.getUserInformation().subscribe((data:any)=>{
-        console.log(data)
        this.utilisateur=data
        this.nomRoles=this.utilisateur.roleUtilisateurs[0].nomRoles
       });}else{
