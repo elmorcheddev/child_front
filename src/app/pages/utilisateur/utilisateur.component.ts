@@ -5,6 +5,7 @@ import { RoleUtilisateur } from 'src/app/monClass/Roles';
 import { UtilisateurService } from 'src/app/monService/utilisateur.service';
 import { ParentService } from 'src/app/monService/parent.service';
 import { Parent } from 'src/app/monClass/parent';
+import { Router } from '@angular/router';
 
 declare var window: any;
 
@@ -38,9 +39,7 @@ this.utilisateurService.getById(id).subscribe((data:Utilisateur)=>{
       roleUtilisateurs: []
     }
   }
-saveParent(_t175: NgForm) {
-throw new Error('Method not implemented.');
-}
+ 
   listUsers: Utilisateur[] = [];
   utilisateur: Utilisateur = {
     nom: '',
@@ -66,7 +65,7 @@ throw new Error('Method not implemented.');
     { id: 3, nomRoles: 'ROLE_PARENT' }
   ];
 
-  constructor(private utilisateurService: UtilisateurService, private parentService:ParentService) {}
+  constructor(private utilisateurService: UtilisateurService,private router:Router,  private parentService:ParentService) {}
 
   ngOnInit() {
     this.loadUsers();
@@ -151,4 +150,31 @@ createdUtilisateurId: number | null = null;
     this.utilisateur = new Utilisateur();
     this.message = '';
   }
+  saveParent(form: NgForm) {
+    if (form.invalid) return;
+
+    if (!this.utilisateur || !this.utilisateur.id) {
+      this.message = "Utilisateur non sélectionné pour la relation parent.";
+      return;
+    }
+
+    this.parentService.createParent(this.parent, this.utilisateur.id).subscribe({
+      next: (createdParent) => {
+        this.message = 'Relation Parent ajoutée avec succès !';
+        form.resetForm();
+
+        // Fermer la modal Bootstrap parentModal
+        const parentModalElement = document.getElementById('parentModal');
+        const modalInstance = window.bootstrap.Modal.getInstance(parentModalElement);
+        modalInstance?.hide();
+
+        // Redirection vers /parents
+        this.router.navigate(['/parents']);
+      },
+      error: (err) => {
+        this.message = 'Erreur lors de l\'ajout de la relation parent : ' + err.message;
+      }
+    });
+  }
+
 }
