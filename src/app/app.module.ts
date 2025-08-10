@@ -22,6 +22,7 @@ import { AuthInterceptor } from './auth/auth.intercepter';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { UtilisateurComponent } from './pages/utilisateur/utilisateur.component';
+import { ParentsComponent } from './pages/parents/parents.component';
    @NgModule({
   declarations: [
     AppComponent,
@@ -30,6 +31,7 @@ import { UtilisateurComponent } from './pages/utilisateur/utilisateur.component'
       IndexComponent,
       HeaderComponent,
         UtilisateurComponent,
+        ParentsComponent,
     
          
   ],

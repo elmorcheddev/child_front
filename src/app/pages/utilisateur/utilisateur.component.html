@@ -4,15 +4,10 @@
     <h6>Voir / Rechercher Utilisateurs</h6>
   </div>
   <div>
-    <button
-  class="btn btn-primary"
-  data-bs-toggle="modal"
-  data-bs-target="#userModal"
-  (click)="openModalForAdd()"
->
-  <img src="assets/img/icons/plus.svg" class="me-1" alt="plus icon" />
-  Ajouter Utilisateur
-</button>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal" (click)="openModalForAdd()">
+      <img src="assets/img/icons/plus.svg" class="me-1" alt="plus icon" />
+      Ajouter Utilisateur
+    </button>
 
   </div>
 </div>
@@ -51,6 +46,11 @@
             </span>
           </td>
           <td>
+            <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#parentModal"
+              title="Ajouter Relation Parent" (click)="setUserId(u.id)">
+              <img src="assets/img/icons/link.svg" alt="link" width="16" />
+            </button>
+
             <button class="btn btn-sm btn-outline-primary me-2" (click)="editUser(u.id)">
               <img src="assets/img/icons/edit.svg" alt="edit" width="16" />
             </button>
@@ -73,14 +73,17 @@
     <div class="modal-content">
       <form #form="ngForm" (ngSubmit)="saveUser(form)" novalidate>
         <div class="modal-header">
-          <h5 class="modal-title" id="userModalTitle">{{ isEditMode ? 'Modifier Utilisateur' : 'Ajouter Utilisateur' }}</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer" (click)="resetForm(form)"></button>
+          <h5 class="modal-title" id="userModalTitle">{{ isEditMode ? 'Modifier Utilisateur' : 'Ajouter Utilisateur' }}
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"
+            (click)="resetForm(form)"></button>
         </div>
         <div class="modal-body">
           <div class="row g-3">
             <div class="col-md-6">
               <label for="nom" class="form-label">Nom *</label>
-              <input id="nom" name="nom" [(ngModel)]="utilisateur.nom" #nom="ngModel" required minlength="3" class="form-control" />
+              <input id="nom" name="nom" [(ngModel)]="utilisateur.nom" #nom="ngModel" required minlength="3"
+                class="form-control" />
               <div *ngIf="nom.invalid && (nom.dirty || nom.touched)" class="text-danger small">
                 <div *ngIf="nom.errors?.['required']">Le nom est requis.</div>
                 <div *ngIf="nom.errors?.['minlength']">Minimum 3 caractères.</div>
@@ -89,7 +92,8 @@
 
             <div class="col-md-6">
               <label for="prenom" class="form-label">Prénom *</label>
-              <input id="prenom" name="prenom" [(ngModel)]="utilisateur.prenom" #prenom="ngModel" required minlength="3" class="form-control" />
+              <input id="prenom" name="prenom" [(ngModel)]="utilisateur.prenom" #prenom="ngModel" required minlength="3"
+                class="form-control" />
               <div *ngIf="prenom.invalid && (prenom.dirty || prenom.touched)" class="text-danger small">
                 <div *ngIf="prenom.errors?.['required']">Le prénom est requis.</div>
                 <div *ngIf="prenom.errors?.['minlength']">Minimum 3 caractères.</div>
@@ -98,7 +102,8 @@
 
             <div class="col-md-6">
               <label for="email" class="form-label">Email *</label>
-              <input id="email" name="email" [(ngModel)]="utilisateur.email" #email="ngModel" required email class="form-control" />
+              <input id="email" name="email" [(ngModel)]="utilisateur.email" #email="ngModel" required email
+                class="form-control" />
               <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger small">
                 <div *ngIf="email.errors?.['required']">L'email est requis.</div>
                 <div *ngIf="email.errors?.['email']">Email invalide.</div>
@@ -117,12 +122,14 @@
 
             <div class="col-md-6">
               <label for="dateNaissance" class="form-label">Date de Naissance</label>
-              <input id="dateNaissance" name="dateNaissance" type="date" [(ngModel)]="utilisateur.dateNaissance" class="form-control" />
+              <input id="dateNaissance" name="dateNaissance" type="date" [(ngModel)]="utilisateur.dateNaissance"
+                class="form-control" />
             </div>
 
             <div class="col-md-6" *ngIf="!isEditMode">
               <label for="password" class="form-label">Mot de passe *</label>
-              <input id="password" name="password" [(ngModel)]="utilisateur.password" #password="ngModel" required minlength="6" type="password" class="form-control" />
+              <input id="password" name="password" [(ngModel)]="utilisateur.password" #password="ngModel" required
+                minlength="6" type="password" class="form-control" />
               <div *ngIf="password.invalid && (password.dirty || password.touched)" class="text-danger small">
                 <div *ngIf="password.errors?.['required']">Le mot de passe est requis.</div>
                 <div *ngIf="password.errors?.['minlength']">Minimum 6 caractères.</div>
@@ -136,16 +143,6 @@
               </div>
             </div>
 
-            <div class="col-12">
-              <label for="roles" class="form-label">Rôles Utilisateurs *</label>
-              <select id="roles" name="roleUtilisateurs" multiple size="4" class="form-select" required
-                [(ngModel)]="utilisateur.roleUtilisateurs" #roles="ngModel">
-                <option *ngFor="let role of allRoles" [ngValue]="role">{{ role.nomRoles }}</option>
-              </select>
-              <div *ngIf="roles.invalid && (roles.dirty || roles.touched)" class="text-danger small">
-                <div *ngIf="roles.errors?.['required']">Sélectionnez au moins un rôle.</div>
-              </div>
-            </div>
 
           </div>
         </div>
@@ -153,7 +150,38 @@
           <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
             {{ isEditMode ? 'Mettre à jour' : 'Ajouter' }}
           </button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="resetForm(form)">Annuler</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+            (click)="resetForm(form)">Annuler</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="parentModal" tabindex="-1" aria-labelledby="parentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md modal-dialog-scrollable">
+    <div class="modal-content">
+      <form #parentForm="ngForm" (ngSubmit)="saveParent(parentForm)" novalidate>
+        <div class="modal-header">
+          <h5 class="modal-title" id="parentModalLabel">Ajouter Relation Parent</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="relation" class="form-label">Relation *</label>
+            <input id="relation" name="relation" [(ngModel)]="parent.relation" #relation="ngModel" required
+              minlength="3" class="form-control" placeholder="Exemple : Père, Mère, Tuteur..." />
+            <div *ngIf="relation.invalid && (relation.dirty || relation.touched)" class="text-danger small">
+              <div *ngIf="relation.errors?.['required']">Le champ relation est requis.</div>
+              <div *ngIf="relation.errors?.['minlength']">Minimum 3 caractères.</div>
+            </div>
+          </div>
+          <div>
+            <small>Utilisateur lié : <strong>{{ utilisateur.id }}</strong></small>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" [disabled]="parentForm.invalid">Ajouter Parent</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
         </div>
       </form>
     </div>

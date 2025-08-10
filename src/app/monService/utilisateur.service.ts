@@ -18,7 +18,7 @@ export class UtilisateurService {
 
   // Récupérer un utilisateur par ID
   getById(id: number): Observable<Utilisateur> {
-    return this.http.get<Utilisateur>(`${this.apiUrl}/byId/${id}`);
+    return this.http.get<Utilisateur>(`${this.apiUrl}/${id}`);
   }
 
   // Créer un nouvel utilisateur

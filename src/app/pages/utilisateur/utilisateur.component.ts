@@ -3,6 +3,8 @@ import { NgForm } from '@angular/forms';
 import { Utilisateur } from 'src/app/monClass/utilisateur';
 import { RoleUtilisateur } from 'src/app/monClass/Roles';
 import { UtilisateurService } from 'src/app/monService/utilisateur.service';
+import { ParentService } from 'src/app/monService/parent.service';
+import { Parent } from 'src/app/monClass/parent';
 
 declare var window: any;
 
@@ -12,6 +14,33 @@ declare var window: any;
   styleUrls: ['./utilisateur.component.css']
 })
 export class UtilisateurComponent implements OnInit {
+setUserId(id: number) {
+this.utilisateurService.getById(id).subscribe((data:Utilisateur)=>{
+  console.log(data)
+  this.utilisateur=data
+})
+}
+  parent:Parent={
+    id: 0,
+    relation: '',
+    children: [],
+    utilisateur: {
+      id: 0,
+      nom: '',
+      prenom: '',
+      email: '',
+      password: '',
+      adresse: '',
+      tel: '',
+      cin: '',
+      dateNaissance: '',
+      etat: false,
+      roleUtilisateurs: []
+    }
+  }
+saveParent(_t175: NgForm) {
+throw new Error('Method not implemented.');
+}
   listUsers: Utilisateur[] = [];
   utilisateur: Utilisateur = {
     nom: '',
@@ -37,7 +66,7 @@ export class UtilisateurComponent implements OnInit {
     { id: 3, nomRoles: 'ROLE_PARENT' }
   ];
 
-  constructor(private utilisateurService: UtilisateurService) {}
+  constructor(private utilisateurService: UtilisateurService, private parentService:ParentService) {}
 
   ngOnInit() {
     this.loadUsers();
@@ -97,6 +126,11 @@ export class UtilisateurComponent implements OnInit {
       });
     }
   }
+createdUtilisateurId: number | null = null;
+
+ 
+ 
+ 
 
   deleteUser(id: number | undefined) {
     if (!id) return;
