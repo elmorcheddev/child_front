@@ -12,8 +12,7 @@ export class ParentService {
   constructor(private http: HttpClient) {}
 
   createParent(parent: Parent, utilisateurId: number): Observable<Parent> {
-    const params = new HttpParams().set('utilisateurId', utilisateurId.toString());
-    return this.http.post<Parent>(this.apiUrl, parent, { params });
+    return this.http.post<Parent>(this.apiUrl+'/create/'+utilisateurId, parent);
   }
 
 }
