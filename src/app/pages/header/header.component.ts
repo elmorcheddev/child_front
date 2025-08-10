@@ -23,7 +23,6 @@ export class HeaderComponent implements OnInit {
     etat: false,
     dateNaissance: '',
     roleUtilisateurs: [],
-    confirmPasswrod: ''
   };
    nomRoles: string;
    

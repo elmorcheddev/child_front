@@ -21,9 +21,6 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.intercepter';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { RegisterAdminComponent } from './pages/register-admin/register-admin.component';
-import { EducateurComponent } from './pages/educateur/educateur.component';
-import { ClassComponent } from './pages/class/class.component';
 import { UtilisateurComponent } from './pages/utilisateur/utilisateur.component';
    @NgModule({
   declarations: [
@@ -32,10 +29,7 @@ import { UtilisateurComponent } from './pages/utilisateur/utilisateur.component'
     LoginComponent,
       IndexComponent,
       HeaderComponent,
-      RegisterAdminComponent,
-      EducateurComponent,
-      ClassComponent,
-      UtilisateurComponent,
+        UtilisateurComponent,
     
          
   ],
