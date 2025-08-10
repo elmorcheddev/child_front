@@ -2,13 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Classe } from '../monClass/class';
+import { environment } from '../auth/environment.prod';
  
 @Injectable({
   providedIn: 'root'
 })
 export class ClasseService {
-  private apiUrl = 'http://localhost:8080/api/classes';
-
+    private baseUrl = environment.apiUrl; // URL globale
+    
+      // Construis ton url spécifique au endpoint ici
+      private apiUrl = `${this.baseUrl}/classes`;
+ 
   constructor(private http: HttpClient) {}
 
   create(classe: Classe): Observable<Classe> {

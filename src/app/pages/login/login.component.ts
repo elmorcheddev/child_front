@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router'; 
 import { AdminService } from '../../monService/admin.service';
 import { AdminAuthService } from '../../monService/admin-auth.service';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -15,40 +16,66 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router, private adminService: AdminService, private authAdmin: AdminAuthService) {}
   ngOnInit(): void {
    }
-   login(form: NgForm) {
-    console.log(form.value)
-    this.adminService.loginAdmin(form.value).subscribe(
-      (data: any) => {
-        console.log(data)
-        this.authAdmin.setRoles(data.utilisateur.roleUtilisateurs);
-        this.authAdmin.setToken(data.token);
-        const roles = data.utilisateur.roleUtilisateurs[0].nomRoles;
-        if(data.utilisateur.etat == true ){
-          if(!this.adminService.rolesMatch(['PATIENT'])){
-            window.alert("Bien venu " + data.utilisateur.email);
+ login(form: NgForm) {
+  console.log(form.value)
+  this.adminService.loginAdmin(form.value).subscribe(
+    (data: any) => {
+      console.log(data)
+      this.authAdmin.setRoles(data.utilisateur.roleUtilisateurs[0].nomRoles);
+      this.authAdmin.setToken(data.token);
+      const roles = data.utilisateur.roleUtilisateurs[0].nomRoles;
+      
+      if(data.utilisateur.etat == true) {
+        if(!this.adminService.rolesMatch(['PATIENT'])) {
+          // Success alert
+          Swal.fire({
+            icon: 'success',
+            title: 'Bienvenue!',
+            text: `Bien venu ${data.utilisateur.email}`,
+            timer: 2000,
+            showConfirmButton: false
+          }).then(() => {
             this.router.navigate(['/index']).then(() => {
               window.location.reload();
             });
-          }else{
-            this.authAdmin.logout()
-            this.message = "Vérifier votre nom d'utilisateur ou votre mot de passe.";
-           
-          }
-      
-      }else{
-        window.alert("Votre compte a ete desactive ");
-        this.authAdmin.clear()
-        this.router.navigate(['/login']).then(() => {
-          window.location.reload();
-        });
-      }},
-      (error: HttpErrorResponse) => {
-        if (error.status === 403) {
-          this.message = "Vérifier votre nom d'utilisateur ou votre mot de passe.";
-          this.router.navigate(['/login']);
+          });
+        } else {
+          this.authAdmin.logout();
+          // Error alert
+          Swal.fire({
+            icon: 'error',
+            title: 'Erreur',
+            text: "Vérifier votre nom d'utilisateur ou votre mot de passe."
+          });
         }
+      } else {
+        // Account disabled alert
+        Swal.fire({
+          icon: 'warning',
+          title: 'Compte désactivé',
+          text: "Votre compte a été désactivé."
+        }).then(() => {
+          this.authAdmin.clear();
+          this.router.navigate(['/login']).then(() => {
+            window.location.reload();
+          });
+        });
       }
-    );
-  }
+    },
+    (error: HttpErrorResponse) => {
+      if (error.status === 403) {
+        // Error alert for invalid login
+        Swal.fire({
+          icon: 'error',
+          title: 'Erreur de connexion',
+          text: "Vérifier votre nom d'utilisateur ou votre mot de passe."
+        }).then(() => {
+          this.router.navigate(['/login']);
+        });
+      }
+    }
+  );
+}
+
   
 }
