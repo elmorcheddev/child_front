@@ -4,10 +4,16 @@
     <h6>Voir / Rechercher Utilisateurs</h6>
   </div>
   <div>
-    <button class="btn btn-primary" (click)="openModalForAdd()">
-      <img src="assets/img/icons/plus.svg" class="me-1" alt="plus icon" />
-      Ajouter Utilisateur
-    </button>
+    <button
+  class="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#userModal"
+  (click)="openModalForAdd()"
+>
+  <img src="assets/img/icons/plus.svg" class="me-1" alt="plus icon" />
+  Ajouter Utilisateur
+</button>
+
   </div>
 </div>
 
