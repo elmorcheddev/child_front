@@ -1,241 +1,153 @@
-<div class="page-header d-flex justify-content-between align-items-center">
+<div class="page-header d-flex justify-content-between align-items-center mb-3">
   <div>
     <h4>Liste des Utilisateurs</h4>
     <h6>Voir / Rechercher Utilisateurs</h6>
   </div>
-  <div class="d-flex align-items-center gap-2">
-    <input
-      type="text"
-      class="form-control"
-      placeholder="Recherche (nom, prénom, email)..."
-      [(ngModel)]="searchTerm"
-      (ngModelChange)="applyFilter()"
-      style="min-width: 250px;"
-    />
+  <div>
     <button class="btn btn-primary" (click)="openModalForAdd()">
-      <img src="assets/img/icons/plus.svg" class="me-1" alt="Ajouter" />
+      <img src="assets/img/icons/plus.svg" class="me-1" alt="plus icon" />
       Ajouter Utilisateur
     </button>
   </div>
 </div>
 
-<!-- Messages -->
-<div *ngIf="message" class="alert alert-info my-2">
-  {{ message }}
-</div>
-
-<!-- Table utilisateurs -->
-<div class="card mt-2">
+<!-- Utilisateur Table -->
+<div class="card">
   <div class="card-body p-0">
-    <div class="table-responsive">
-      <table class="table table-striped table-hover mb-0">
-        <thead class="table-dark">
-          <tr>
-            <th>Nom et Prénom</th>
-            <th>Adresse</th>
-            <th>Téléphone</th>
-            <th>Date Naissance</th>
-            <th>Email</th>
-            <th>Statut</th>
-            <th style="width: 110px;">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let u of filteredUsers">
-            <td>{{ u.nom }} {{ u.prenom }}</td>
-            <td>{{ u.adresse || '-' }}</td>
-            <td>{{ u.tel || '-' }}</td>
-            <td>{{ u.dateNaissance | date:'dd/MM/yyyy' }}</td>
-            <td>{{ u.email }}</td>
-            <td>
-              <span [class.text-success]="u.etat" [class.text-danger]="!u.etat">
-                {{ u.etat ? 'ACTIVÉ' : 'DÉSACTIVÉ' }}
-              </span>
-            </td>
-            <td>
-              <button
-                class="btn btn-sm btn-outline-primary me-2"
-                (click)="editUser(u.id!)"
-                title="Modifier"
-              >
-                <img src="assets/img/icons/edit.svg" alt="Modifier" width="16" />
-              </button>
-              <button
-                class="btn btn-sm btn-outline-danger"
-                (click)="deleteUser(u.id!)"
-                title="Supprimer"
-              >
-                <img src="assets/img/icons/delete.svg" alt="Supprimer" width="16" />
-              </button>
-            </td>
-          </tr>
-          <tr *ngIf="filteredUsers.length === 0">
-            <td colspan="7" class="text-center py-3">Aucun utilisateur trouvé.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <table class="table table-hover mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>Nom et Prénom</th>
+          <th>Adresse</th>
+          <th>Téléphone</th>
+          <th>Date Naissance</th>
+          <th>Email</th>
+          <th>Statut</th>
+          <th>Rôles</th>
+          <th style="width: 120px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of listUsers">
+          <td>{{ u.nom }} {{ u.prenom }}</td>
+          <td>{{ u.adresse || '-' }}</td>
+          <td>{{ u.tel || '-' }}</td>
+          <td>{{ u.dateNaissance ? (u.dateNaissance | date:'dd/MM/yyyy') : '-' }}</td>
+          <td>{{ u.email }}</td>
+          <td>
+            <span [class.text-success]="u.etat" [class.text-danger]="!u.etat">
+              {{ u.etat ? 'ACTIVÉ' : 'DÉSACTIVÉ' }}
+            </span>
+          </td>
+          <td>
+            <span *ngFor="let r of u.roleUtilisateurs; let last = last">
+              {{ r.nomRoles }}<span *ngIf="!last">, </span>
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-sm btn-outline-primary me-2" (click)="editUser(u.id)">
+              <img src="assets/img/icons/edit.svg" alt="edit" width="16" />
+            </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="deleteUser(u.id)">
+              <img src="assets/img/icons/delete.svg" alt="delete" width="16" />
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="listUsers.length === 0">
+          <td colspan="8" class="text-center py-3">Aucun utilisateur trouvé.</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 
 <!-- Modal Ajout / Edition Utilisateur -->
-<div
-  class="modal fade"
-  id="userModal"
-  tabindex="-1"
-  aria-labelledby="userModalTitle"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-lg">
+<div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
     <div class="modal-content">
       <form #form="ngForm" (ngSubmit)="saveUser(form)" novalidate>
         <div class="modal-header">
-          <h5 class="modal-title" id="userModalTitle">
-            {{ isEditMode ? 'Modifier Utilisateur' : 'Ajouter Utilisateur' }}
-          </h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Fermer"
-            (click)="resetForm(form)"
-          ></button>
+          <h5 class="modal-title" id="userModalTitle">{{ isEditMode ? 'Modifier Utilisateur' : 'Ajouter Utilisateur' }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer" (click)="resetForm(form)"></button>
         </div>
         <div class="modal-body">
           <div class="row g-3">
-            <div class="col-lg-6 col-sm-12">
+            <div class="col-md-6">
               <label for="nom" class="form-label">Nom *</label>
-              <input
-                type="text"
-                id="nom"
-                name="nom"
-                class="form-control"
-                required
-                minlength="3"
-                [(ngModel)]="utilisateur.nom"
-                #nom="ngModel"
-              />
-              <div
-                *ngIf="nom.invalid && (nom.dirty || nom.touched)"
-                class="text-danger small"
-              >
+              <input id="nom" name="nom" [(ngModel)]="utilisateur.nom" #nom="ngModel" required minlength="3" class="form-control" />
+              <div *ngIf="nom.invalid && (nom.dirty || nom.touched)" class="text-danger small">
                 <div *ngIf="nom.errors?.['required']">Le nom est requis.</div>
-                <div *ngIf="nom.errors?.['minlength']">
-                  Minimum 3 caractères.
-                </div>
+                <div *ngIf="nom.errors?.['minlength']">Minimum 3 caractères.</div>
               </div>
             </div>
 
-            <div class="col-lg-6 col-sm-12">
+            <div class="col-md-6">
               <label for="prenom" class="form-label">Prénom *</label>
-              <input
-                type="text"
-                id="prenom"
-                name="prenom"
-                class="form-control"
-                required
-                minlength="3"
-                [(ngModel)]="utilisateur.prenom"
-                #prenom="ngModel"
-              />
-              <div
-                *ngIf="prenom.invalid && (prenom.dirty || prenom.touched)"
-                class="text-danger small"
-              >
+              <input id="prenom" name="prenom" [(ngModel)]="utilisateur.prenom" #prenom="ngModel" required minlength="3" class="form-control" />
+              <div *ngIf="prenom.invalid && (prenom.dirty || prenom.touched)" class="text-danger small">
                 <div *ngIf="prenom.errors?.['required']">Le prénom est requis.</div>
-                <div *ngIf="prenom.errors?.['minlength']">
-                  Minimum 3 caractères.
-                </div>
+                <div *ngIf="prenom.errors?.['minlength']">Minimum 3 caractères.</div>
               </div>
             </div>
 
-            <div class="col-lg-6 col-sm-12">
+            <div class="col-md-6">
               <label for="email" class="form-label">Email *</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                class="form-control"
-                required
-                email
-                [(ngModel)]="utilisateur.email"
-                #email="ngModel"
-              />
-              <div
-                *ngIf="email.invalid && (email.dirty || email.touched)"
-                class="text-danger small"
-              >
+              <input id="email" name="email" [(ngModel)]="utilisateur.email" #email="ngModel" required email class="form-control" />
+              <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger small">
                 <div *ngIf="email.errors?.['required']">L'email est requis.</div>
                 <div *ngIf="email.errors?.['email']">Email invalide.</div>
               </div>
             </div>
 
-            <div class="col-lg-6 col-sm-12">
+            <div class="col-md-6">
               <label for="tel" class="form-label">Téléphone</label>
-              <input
-                type="text"
-                id="tel"
-                name="tel"
-                class="form-control"
-                [(ngModel)]="utilisateur.tel"
-              />
+              <input id="tel" name="tel" [(ngModel)]="utilisateur.tel" class="form-control" />
             </div>
 
-            <div class="col-lg-6 col-sm-12">
+            <div class="col-md-6">
               <label for="adresse" class="form-label">Adresse</label>
-              <input
-                type="text"
-                id="adresse"
-                name="adresse"
-                class="form-control"
-                [(ngModel)]="utilisateur.adresse"
-              />
+              <input id="adresse" name="adresse" [(ngModel)]="utilisateur.adresse" class="form-control" />
             </div>
 
-            <div class="col-lg-6 col-sm-12">
+            <div class="col-md-6">
               <label for="dateNaissance" class="form-label">Date de Naissance</label>
-              <input
-                type="date"
-                id="dateNaissance"
-                name="dateNaissance"
-                class="form-control"
-                [(ngModel)]="utilisateur.dateNaissance"
-              />
+              <input id="dateNaissance" name="dateNaissance" type="date" [(ngModel)]="utilisateur.dateNaissance" class="form-control" />
             </div>
 
-            <div class="col-lg-6 col-sm-12">
-              <label for="password" class="form-label">
-                Mot de passe
-                <span *ngIf="!isEditMode">*</span>
-              </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                class="form-control"
-                [required]="!isEditMode"
-                minlength="6"
-                [(ngModel)]="utilisateur.password"
-              />
+            <div class="col-md-6" *ngIf="!isEditMode">
+              <label for="password" class="form-label">Mot de passe *</label>
+              <input id="password" name="password" [(ngModel)]="utilisateur.password" #password="ngModel" required minlength="6" type="password" class="form-control" />
+              <div *ngIf="password.invalid && (password.dirty || password.touched)" class="text-danger small">
+                <div *ngIf="password.errors?.['required']">Le mot de passe est requis.</div>
+                <div *ngIf="password.errors?.['minlength']">Minimum 6 caractères.</div>
+              </div>
             </div>
+
+            <div class="col-md-6 d-flex align-items-center">
+              <div class="form-check mt-4">
+                <input id="etat" name="etat" type="checkbox" class="form-check-input" [(ngModel)]="utilisateur.etat" />
+                <label for="etat" class="form-check-label">Activé</label>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label for="roles" class="form-label">Rôles Utilisateurs *</label>
+              <select id="roles" name="roleUtilisateurs" multiple size="4" class="form-select" required
+                [(ngModel)]="utilisateur.roleUtilisateurs" #roles="ngModel">
+                <option *ngFor="let role of allRoles" [ngValue]="role">{{ role.nomRoles }}</option>
+              </select>
+              <div *ngIf="roles.invalid && (roles.dirty || roles.touched)" class="text-danger small">
+                <div *ngIf="roles.errors?.['required']">Sélectionnez au moins un rôle.</div>
+              </div>
+            </div>
+
           </div>
         </div>
         <div class="modal-footer">
-          <button
-            type="submit"
-            class="btn btn-primary"
-            [disabled]="form.invalid"
-          >
+          <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
             {{ isEditMode ? 'Mettre à jour' : 'Ajouter' }}
           </button>
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-            (click)="resetForm(form)"
-          >
-            Annuler
-          </button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="resetForm(form)">Annuler</button>
         </div>
       </form>
     </div>
