@@ -7,7 +7,7 @@ import { Utilisateur } from '../monClass/utilisateur';
   providedIn: 'root'
 })
 export class UtilisateurService {
-  private apiUrl = 'https://childrengard.onrender.com/api/utilisateur';
+  private apiUrl = 'https://childrengard.onrender.com/api/utilisateurs';
 
   constructor(private http: HttpClient) {}
 
