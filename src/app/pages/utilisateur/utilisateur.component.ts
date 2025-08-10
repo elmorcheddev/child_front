@@ -13,7 +13,19 @@ declare var window: any;
 })
 export class UtilisateurComponent implements OnInit {
   listUsers: Utilisateur[] = [];
-  utilisateur: Utilisateur = new Utilisateur();
+  utilisateur: Utilisateur = {
+    nom: '',
+    prenom: '',
+    email: '',
+    password: '',
+    etat: false,
+    roleUtilisateurs: [],
+    id: 0,
+    adresse: '',
+    tel: '',
+    cin: '',
+    dateNaissance: ''
+  };
   isEditMode = false;
   message = '';
   modal: any;
