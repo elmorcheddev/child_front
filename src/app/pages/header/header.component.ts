@@ -15,16 +15,14 @@ export class HeaderComponent implements OnInit {
     id: 0,
     nom: '',
     prenom: '',
-    adresse: '',
-    tel: '',
-    cin: '',
     email: '',
     password: '',
+    tel: '',
+    cin: '',
     etat: false,
-    dateNaissance: '',
-    roleUtilisateurs: [],
+    role: new RoleUtilisateur
   };
-   nomRoles: string;
+   nomRoles: any;
    
      constructor(public adminService:AdminService
         ,private authAdmin:AdminAuthService, private router:Router , private activatedRoute:ActivatedRoute){}
@@ -34,7 +32,7 @@ export class HeaderComponent implements OnInit {
     if(this.authAdmin.isLoggedIn() && this.authAdmin.getCurrentUser()!=null){
       this.adminService.getUserInformation().subscribe((data:any)=>{
        this.utilisateur=data
-       this.nomRoles=this.utilisateur.roleUtilisateurs[0].nomRoles
+       this.nomRoles=this.utilisateur.role
       });}else{
         this.authAdmin.logout()
         this.router.navigate(['/login'])

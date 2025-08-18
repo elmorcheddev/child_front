@@ -1,9 +1,20 @@
-import { Child } from "./Child";
-import { Utilisateur } from "./utilisateur";
+import { Enfant } from "./enfant";
 
- export class Parent {
+export interface Parent {
   id: number;
-  relation!: string;
-  utilisateur: Utilisateur;  // Pour simplifier, juste un id utilisateur côté front suffit
-  children: Child[] = [];
+  nom: string;
+  prenom: string;
+  relation: string; // père, mère, tuteur
+  cin: string;
+  adresse: string;
+  telPrincipal: string;
+  telSecondaire: string;
+  email: string;
+  profession: string;
+  lieuTravail: string;
+  telTravail: string;
+  contactUrgenceNom: string;
+  contactUrgenceTel: string;
+  etat: boolean;
+  enfants: Enfant[];
 }

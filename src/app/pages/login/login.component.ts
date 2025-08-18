@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { AdminService } from '../../monService/admin.service';
 import { AdminAuthService } from '../../monService/admin-auth.service';
 import Swal from 'sweetalert2';
+import { Utilisateur } from 'src/app/monClass/utilisateur';
+import { RoleUtilisateur } from 'src/app/monClass/Roles';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -12,7 +14,17 @@ import Swal from 'sweetalert2';
 })
 export class LoginComponent implements OnInit {
   message: string;
-  utilisateur: any;
+  utilisateur: Utilisateur={
+    nom: '',
+    prenom: '',
+    email: '',
+    password: '',
+    etat: false,
+    role: new RoleUtilisateur,
+    id: 0,
+    tel: '',
+    cin: ''
+  };
   constructor(private router: Router, private adminService: AdminService, private authAdmin: AdminAuthService) {}
   ngOnInit(): void {
    }
@@ -21,10 +33,9 @@ export class LoginComponent implements OnInit {
   this.adminService.loginAdmin(form.value).subscribe(
     (data: any) => {
       console.log(data)
-      this.authAdmin.setRoles(data.utilisateur.roleUtilisateurs[0].nomRoles);
+      this.authAdmin.setRoles(data.utilisateur.role.nomRoles);
       this.authAdmin.setToken(data.token);
-      const roles = data.utilisateur.roleUtilisateurs[0].nomRoles;
-      
+       
       if(data.utilisateur.etat == true) {
         if(!this.adminService.rolesMatch(['PATIENT'])) {
           // Success alert

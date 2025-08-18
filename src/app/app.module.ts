@@ -21,8 +21,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.intercepter';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { UtilisateurComponent } from './pages/utilisateur/utilisateur.component';
-import { ParentsComponent } from './pages/parents/parents.component';
+import { ParentComponent } from './pages/parent/parent.component'; 
    @NgModule({
   declarations: [
     AppComponent,
@@ -30,8 +29,8 @@ import { ParentsComponent } from './pages/parents/parents.component';
     LoginComponent,
       IndexComponent,
       HeaderComponent,
-        UtilisateurComponent,
-        ParentsComponent,
+      ParentComponent,
+         
     
          
   ],

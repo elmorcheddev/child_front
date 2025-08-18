@@ -1,17 +1,16 @@
 import { RoleUtilisateur } from "./Roles";
 
+
 export class Utilisateur {
-  id: number;
+  id: number;          // optional because it’s auto-generated in backend
   nom: string;
   prenom: string;
   email: string;
   password: string;
-  adresse: string;
+  adresse?: string;
   tel: string;
   cin: string;
-  dateNaissance: string;
+  dateNaissance?: string;
   etat: boolean;
-  roleUtilisateurs: RoleUtilisateur[] = [];
-
-  
+  role: RoleUtilisateur;
 }
