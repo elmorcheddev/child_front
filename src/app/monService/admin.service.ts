@@ -9,8 +9,8 @@ import { Utilisateur } from '../monClass/utilisateur';
 })
 export class AdminService {
   
-//PATH_APP="https://childrengard.onrender.com/auth"
-PATH_APP="http://localhost:8080/auth"
+PATH_APP="https://childrengard.onrender.com/auth"
+//PATH_APP="http://localhost:8080/auth"
   constructor(private httpClient:HttpClient,private adminAuthService:AdminAuthService) { }
   requestHeader = new HttpHeaders({
 	   
