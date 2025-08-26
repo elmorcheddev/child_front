@@ -1,0 +1,64 @@
+<!-- PAGE HEADER -->
+<div class="page-header mb-4">
+  <div class="page-title">
+    <h4 class="fw-bold text-primary">Enfant List</h4>
+    <h6 class="text-muted">View/Search Enfant</h6>
+  </div>
+</div>
+
+<!-- CARD -->
+<div class="card shadow-sm border-0 rounded-4">
+  <div class="card-body">
+
+    <!-- Table Top: Search + Filter -->
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+      
+      <!-- Filter Button -->
+      <div class="d-flex align-items-center mb-2">
+        
+      </div>
+
+      <!-- Search Input -->
+      <div class="input-group mb-2" style="max-width: 250px;">
+        <input type="text" class="form-control form-control-sm shadow-sm" placeholder="Search Enfant">
+        <button class="btn btn-primary btn-sm">
+          <img src="assets/img/icons/search-white.svg" alt="search" style="height:16px;">
+        </button>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive">
+      <table class="table table-hover table-striped align-middle text-center mb-0 shadow-sm rounded-3">
+        <thead class="table-light">
+          <tr>
+            <th>Nom et Prénom</th>
+            <th>Date Naissance</th>
+            <th>État Santé</th>
+            <th>Group</th>
+            <th>Parent</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of enfants">
+            <td class="fw-semibold">{{ p.nom + ' ' + p.prenom }}</td>
+            <td>{{ p.dateNaissance | date:'dd/MM/yyyy' }}</td>
+            <td>{{ p.etatSante }}</td>
+            <td>{{ p.classe.nomClass || '-' }}</td>
+            <td>{{ p.parent.nom + ' ' + p.parent.prenom }}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-danger shadow-sm" (click)="deleteEnfant(p.id)" title="Supprimer">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="enfants.length === 0">
+            <td colspan="6" class="text-center fst-italic text-muted">Aucun enfant disponible</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

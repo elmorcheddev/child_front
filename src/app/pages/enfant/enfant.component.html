@@ -1,0 +1,157 @@
+<div class="container mt-5">
+
+  <!-- Parent Information Card -->
+  <div class="card shadow-sm mb-4 border-0 rounded-4">
+    <div class="card-header bg-primary text-white rounded-top-4 d-flex align-items-center">
+      <i class="bi bi-person-vcard me-2 fs-5"></i>
+      <h5 class="mb-0 fw-semibold">Informations du Parent</h5>
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-6"><strong>Nom :</strong> {{ parent.nom }}</div>
+        <div class="col-md-6"><strong>Prénom :</strong> {{ parent.prenom }}</div>
+        <div class="col-md-6"><strong>Relation :</strong> {{ parent.relation }}</div>
+        <div class="col-md-6"><strong>CIN :</strong> {{ parent.cin }}</div>
+        <div class="col-md-6"><strong>Adresse :</strong> {{ parent.adresse }}</div>
+        <div class="col-md-6"><strong>Téléphone :</strong> {{ parent.telPrincipal }}</div>
+        <div class="col-md-6"><strong>Téléphone Secondaire :</strong> {{ parent.telSecondaire }}</div>
+        <div class="col-md-6"><strong>Email :</strong> {{ parent.email }}</div>
+        <div class="col-md-6"><strong>Profession :</strong> {{ parent.profession }}</div>
+        <div class="col-md-6"><strong>Lieu Travail :</strong> {{ parent.lieuTravail }}</div>
+        <div class="col-md-6"><strong>Téléphone Travail :</strong> {{ parent.telTravail }}</div>
+        <div class="col-md-6"><strong>Contact Urgence :</strong> {{ parent.contactUrgenceNom }} - {{ parent.contactUrgenceTel }}</div>
+        <div class="col-md-6">
+          <strong>Status :</strong>
+          <span *ngIf="parent.etat" class="badge bg-success">Activé</span>
+          <span *ngIf="!parent.etat" class="badge bg-danger">Désactivé</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Children List Card -->
+  <div class="card shadow-sm border-0 rounded-4">
+    <div class="card-header d-flex justify-content-between align-items-center bg-success text-white rounded-top-4">
+      <div class="d-flex align-items-center">
+        <i class="bi bi-people-fill me-2 fs-5"></i>
+        <h5 class="mb-0 fw-semibold">Enfants du Parent</h5>
+      </div>
+      <button class="btn btn-light btn-sm shadow-sm" data-bs-toggle="modal" data-bs-target="#addEnfant">
+        <i class="bi bi-person-plus me-1"></i> Ajouter Enfant
+      </button>
+    </div>
+    <div class="card-body p-3">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle text-center mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Nom</th>
+              <th>Prénom</th>
+              <th>Date Naissance</th>
+              <th>Classe</th>
+              <th>État Santé</th>
+              <th>Paiement</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let e of enfants">
+              <td class="fw-semibold">{{ e.nom }}</td>
+              <td>{{ e.prenom }}</td>
+              <td>{{ e.dateNaissance | date:'dd/MM/yyyy' }}</td>
+              <td>{{ e.classe.nomClass }}</td>
+              <td>{{ e.etatSante }}</td>
+              <td>
+                <span *ngIf="e.payee" class="badge bg-success">Oui</span>
+                <span *ngIf="!e.payee" class="badge bg-danger">Non</span>
+              </td>
+              <td class="text-center">
+                <button class="btn btn-sm btn-outline-primary me-1" (click)="editEnfant(e)" title="Modifier">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger me-1" (click)="deleteEnfant(e.id)" title="Supprimer">
+                  <i class="bi bi-trash"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-secondary me-1" (click)="downoadRecu(e.id,e.nom)" title="Reçu">
+                  <i class="bi bi-download"></i>
+                </button>
+                <button class="btn btn-sm btn-success" *ngIf="!e.payee" (click)="openPaiementModal(e)">
+                  <i class="bi bi-cash-stack me-1"></i> Payer
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="enfants.length === 0">
+              <td colspan="7" class="text-center text-muted fst-italic">Aucun enfant enregistré</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Child Modal -->
+  <div class="modal fade" id="addEnfant" tabindex="-1" aria-labelledby="enfantModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content shadow-lg rounded-4 border-0">
+        <div class="modal-header bg-primary text-white rounded-top-4">
+          <h5 class="modal-title"><i class="bi bi-person-plus me-2"></i> Ajouter Enfant</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form #enfantForm="ngForm" (ngSubmit)="addEnfant()">
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Nom</label>
+              <input type="text" class="form-control shadow-sm" [(ngModel)]="newEnfant.nom" name="nom" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Prénom</label>
+              <input type="text" class="form-control shadow-sm" [(ngModel)]="newEnfant.prenom" name="prenom" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Date de Naissance</label>
+              <input type="date" class="form-control shadow-sm" [(ngModel)]="newEnfant.dateNaissance" name="dateNaissance">
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">État Santé</label>
+              <input type="text" class="form-control shadow-sm" [(ngModel)]="newEnfant.etatSante" name="etatSante">
+            </div>
+            <button type="submit" class="btn btn-success w-100 shadow-sm">
+              <i class="bi bi-check-circle me-1"></i> Ajouter
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Modal -->
+  <div #paiementModalRef class="modal fade" id="paiementModal" tabindex="-1" aria-labelledby="paiementModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content shadow-lg rounded-4 border-0">
+        <div class="modal-header bg-success text-white rounded-top-4">
+          <h5 class="modal-title"><i class="bi bi-credit-card me-2"></i> Mode de Paiement</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+          <input type="number" name="monatnt" id="virement" [(ngModel)]="montant" class="form-control form-control-sm shadow-sm"
+         placeholder="Montant" >
+        <div class="modal-body">
+          <p>Choisissez le mode de paiement pour <strong>{{ selectedEnfant.nom }} {{ selectedEnfant.prenom }}</strong> :</p>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="radio" name="modePaiement" id="virement" [(ngModel)]="modePaiement" value="Virement Banc">
+            <label class="form-check-label" for="virement">Virement Banc</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="modePaiement" id="cash" [(ngModel)]="modePaiement" value="Cash">
+            <label class="form-check-label" for="cash">Cash</label>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-outline-secondary shadow-sm" data-bs-dismiss="modal">Annuler</button>
+          <button type="button" class="btn btn-success shadow-sm" (click)="confirmerPaiement(paiementModalRef)">
+            <i class="bi bi-check-circle me-1"></i> Confirmer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

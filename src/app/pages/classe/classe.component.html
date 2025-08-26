@@ -1,0 +1,107 @@
+<div class="container mt-5">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary display-6">
+      <i class="bi bi-journal-bookmark me-2"></i>Gestion des Classes
+    </h2>
+    <button class="btn btn-primary shadow-sm" (click)="openModal()">
+      <i class="bi bi-plus-circle me-2"></i> Ajouter Classe
+    </button>
+  </div>
+
+  <!-- Table -->
+  <div class="table-responsive shadow-sm rounded bg-white p-3">
+    <table class="table table-hover align-middle mb-0 text-center">
+      <thead class="table-primary text-white">
+        <tr>
+          <th class="text-start">Nom de la classe</th>
+          <th>Capacité</th>
+          <th>Âge Min</th>
+          <th>Âge Max</th>
+          <th>Enseignant</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let classe of classes" class="align-middle">
+          <td class="text-start fw-semibold">{{ classe.nomClass }}</td>
+          <td>{{ classe.capacite }}</td>
+          <td>{{ classe.minAge }}</td>
+          <td>{{ classe.maxAge }}</td>
+          <td>{{ classe.teacher?.nom || '-' }}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-warning me-2" (click)="editClasse(classe)">
+              <i class="bi bi-pencil-square"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="deleteClasse(classe.id!)">
+              <i class="bi bi-trash3"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="classes.length === 0">
+          <td colspan="6" class="text-muted fst-italic">Aucune classe disponible</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="classeModal" tabindex="-1" aria-labelledby="classeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg rounded-4 border-0">
+      <form (ngSubmit)="submitForm()">
+        <div class="modal-header bg-primary text-white rounded-top-4">
+          <h5 class="modal-title" id="classeModalLabel">
+            {{ editMode ? '✏️ Modifier Classe' : '➕ Ajouter Classe' }}
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Form Fields -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Nom de la classe</label>
+            <select class="form-select shadow-sm" [(ngModel)]="nomClass" name="nomClass" (change)="onClasseChange()">
+              <option value="">-- Choisir une classe --</option>
+              <option value="Petite section">Petite section</option>
+              <option value="Moyenne section">Moyenne section</option>
+              <option value="Grande section">Grande section</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Capacité</label>
+            <input type="number" class="form-control shadow-sm" placeholder="Capacité" [(ngModel)]="capacite" name="capacite">
+          </div>
+
+          <div class="mb-3 row">
+            <div class="col">
+              <label class="form-label fw-semibold">Âge minimum</label>
+              <input type="number" class="form-control shadow-sm" placeholder="Âge min" [(ngModel)]="minAge" name="minAge">
+            </div>
+            <div class="col">
+              <label class="form-label fw-semibold">Âge maximum</label>
+              <input type="number" class="form-control shadow-sm" placeholder="Âge max" [(ngModel)]="maxAge" name="maxAge">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Enseignant (optionnel)</label>
+            <select class="form-select shadow-sm" [(ngModel)]="teacherId" name="teacherId">
+              <option value="">-- Choisir un enseignant --</option>
+              <option *ngFor="let t of teachers" [value]="t.id">{{ t.nom }} {{ t.prenom }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-footer border-0">
+          <button type="submit" class="btn btn-success shadow-sm">
+            {{ editMode ? '💾 Modifier' : '✅ Ajouter' }}
+          </button>
+          <button type="button" class="btn btn-outline-secondary shadow-sm" data-bs-dismiss="modal">Annuler</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

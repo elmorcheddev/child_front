@@ -11,7 +11,7 @@ import {MatButtonModule} from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 
- import { FormsModule } from '@angular/forms'; 
+ import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
 import { LoginComponent } from './pages/login/login.component';
 import { IndexComponent } from './pages/index/index.component';
 import { HeaderComponent } from './pages/header/header.component';
@@ -21,7 +21,12 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.intercepter';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { ParentComponent } from './pages/parent/parent.component'; 
+import { ParentComponent } from './pages/parent/parent.component';
+import { EnfantComponent } from './pages/enfant/enfant.component';
+import { ListenfantComponent } from './pages/listenfant/listenfant.component';
+import { TeacherComponent } from './pages/teacher/teacher.component';
+ import { ClasseComponent } from './pages/classe/classe.component';
+import { PaimentsComponent } from './pages/paiments/paiments.component'; 
    @NgModule({
   declarations: [
     AppComponent,
@@ -30,6 +35,11 @@ import { ParentComponent } from './pages/parent/parent.component';
       IndexComponent,
       HeaderComponent,
       ParentComponent,
+      EnfantComponent,
+      ListenfantComponent,
+      TeacherComponent,
+       ClasseComponent,
+       PaimentsComponent,
          
     
          
@@ -48,7 +58,8 @@ import { ParentComponent } from './pages/parent/parent.component';
     BrowserAnimationsModule,
     MatDatepickerModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    ReactiveFormsModule  
   ],
   providers: [  AuthGuard,{
     provide:HTTP_INTERCEPTORS,

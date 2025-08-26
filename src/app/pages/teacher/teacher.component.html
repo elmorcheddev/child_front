@@ -1,0 +1,140 @@
+<!-- PAGE HEADER -->
+<div class="page-header d-flex justify-content-between align-items-center flex-wrap mb-4">
+  <h4 class="fw-bold text-primary">Teachers List</h4>
+  <button class="btn btn-primary btn-sm shadow-sm rounded-3 mt-2 mt-md-0" (click)="openModal()">
+    <i class="bi bi-plus-circle me-1"></i> Ajouter Teacher
+  </button>
+</div>
+
+<!-- CARD -->
+<div class="card shadow-sm rounded-4 border-0">
+  <div class="card-body">
+
+    <!-- Table -->
+    <div class="table-responsive">
+      <table class="table table-hover table-striped align-middle text-center mb-0 shadow-sm rounded-3">
+        <thead class="table-light">
+          <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Email</th>
+            <th>Téléphone</th>
+            <th>Spécialité</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let teacher of teachers">
+            <td class="fw-semibold">{{ teacher.nom }}</td>
+            <td>{{ teacher.prenom }}</td>
+            <td>{{ teacher.email }}</td>
+            <td>{{ teacher.telephone }}</td>
+            <td>{{ teacher.specialite }}</td>
+            <td class="d-flex justify-content-center gap-2">
+              <button class="btn btn-outline-warning btn-sm" (click)="openModal(teacher)" title="Edit">
+                <i class="bi bi-pencil-square"></i>
+              </button>
+              <button class="btn btn-outline-danger btn-sm" (click)="deleteTeacher(teacher.id)" title="Delete">
+                <i class="bi bi-trash"></i>
+              </button>
+              <button class="btn btn-outline-success btn-sm" (click)="loadEnfants(teacher.id)" title="Voir Enfants">
+                <i class="bi bi-eye"></i>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="teachers.length === 0">
+            <td colspan="6" class="text-center fst-italic text-muted">No Teachers Found</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Liste des enfants du teacher sélectionné -->
+    <div *ngIf="enfants.length > 0" class="mt-4">
+      <h5 class="text-primary fw-semibold mb-3">Enfants du Teacher</h5>
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let enfant of enfants">
+          {{ enfant.nom }} {{ enfant.prenom }}
+          <span class="badge bg-secondary rounded-pill">{{ enfant.classe.nomClass }}</span>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal fade" id="teacherModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content shadow-lg rounded-4">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">{{ editing ? 'Modifier Teacher' : 'Ajouter Teacher' }}</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row g-3">
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Nom</label>
+              <input type="text" class="form-control shadow-sm"   name="nom" [(ngModel)]="newTeacher.nom" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Prénom</label>
+              <input type="text" class="form-control shadow-sm" name="prenom" [(ngModel)]="newTeacher.prenom" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Email</label>
+              <input type="email" class="form-control shadow-sm" name="email" [(ngModel)]="newTeacher.email" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Téléphone</label>
+              <input type="text" class="form-control shadow-sm" name="telephone" [(ngModel)]="newTeacher.telephone" required>
+            </div>
+
+            <div class="col-md-12">
+              <label class="form-label fw-semibold">Adresse</label>
+              <input type="text" class="form-control shadow-sm" name="adresse" [(ngModel)]="newTeacher.adresse">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Spécialité</label>
+              <input type="text" class="form-control shadow-sm" name="specialite" [(ngModel)]="newTeacher.specialite" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Années d’expérience</label>
+              <input type="number" class="form-control shadow-sm" name="experience" [(ngModel)]="newTeacher.experience">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Diplôme</label>
+              <input type="text" class="form-control shadow-sm" name="diplome" [(ngModel)]="newTeacher.diplome">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Sexe</label>
+              <select class="form-select shadow-sm" name="sexe" [(ngModel)]="newTeacher.sexe">
+                <option value="Homme">Homme</option>
+                <option value="Femme">Femme</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Date de Naissance</label>
+              <input type="date" class="form-control shadow-sm" name="nom" [(ngModel)]="newTeacher.dateNaissance">
+            </div>
+
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-danger shadow-sm" (click)="closeModal()">Annuler</button>
+        <button class="btn btn-primary shadow-sm" (click)="saveTeacher()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+</div>

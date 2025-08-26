@@ -23,7 +23,9 @@ export class LoginComponent implements OnInit {
     role: new RoleUtilisateur,
     id: 0,
     tel: '',
-    cin: ''
+    cin: '',
+    adresse: '',
+    dateNaissance: ''
   };
   constructor(private router: Router, private adminService: AdminService, private authAdmin: AdminAuthService) {}
   ngOnInit(): void {

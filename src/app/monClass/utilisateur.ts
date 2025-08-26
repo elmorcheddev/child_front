@@ -7,10 +7,10 @@ export class Utilisateur {
   prenom: string;
   email: string;
   password: string;
-  adresse?: string;
+  adresse: string;
   tel: string;
   cin: string;
-  dateNaissance?: string;
+  dateNaissance: string;
   etat: boolean;
   role: RoleUtilisateur;
 }

@@ -1,6 +1,6 @@
 import { Enfant } from "./enfant";
 
-export interface Parent {
+export class Parent {
   id: number;
   nom: string;
   prenom: string;

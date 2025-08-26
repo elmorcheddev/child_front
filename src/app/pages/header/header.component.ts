@@ -20,7 +20,9 @@ export class HeaderComponent implements OnInit {
     tel: '',
     cin: '',
     etat: false,
-    role: new RoleUtilisateur
+    role: new RoleUtilisateur,
+    adresse: '',
+    dateNaissance: ''
   };
    nomRoles: any;
    

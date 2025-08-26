@@ -1,0 +1,34 @@
+<div class="card mt-4">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5>Paiements</h5>
+    <input type="text" class="form-control w-25" placeholder="Rechercher..." [(ngModel)]="searchText" (input)="filterPaiements()">
+  </div>
+  <div class="card-body">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Enfant</th>
+          <th>Montant</th>
+          <th>Mois</th>
+          <th>Mode Paiement</th>
+          <th>Date Paiement</th>
+          <th>Reçu PDF</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of filteredPaiements">
+          <td>{{ p.enfant.nom }} {{ p.enfant.prenom }}</td>
+          <td>{{ p.montant }} DT</td>
+          <td>{{ p.mois }}</td>
+          <td>{{ p.modePaiement }}</td>
+          <td>{{ p.datePaiement | date: 'dd/MM/yyyy' }}</td>
+          <td>
+            <button class="btn btn-sm btn-info" (click)="downloadRecu(p.id)">
+              Télécharger
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

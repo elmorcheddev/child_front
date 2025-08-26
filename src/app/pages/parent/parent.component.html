@@ -1,137 +1,193 @@
-<div class="page-header">
+<!-- PAGE HEADER -->
+<div class="page-header d-flex justify-content-between align-items-center mb-4 flex-wrap">
   <div class="page-title">
-    <h4>Parents List</h4>
-    <h6>View/Search Parents</h6>
+    <h4 class="fw-bold text-primary">Parents List</h4>
+    <h6 class="text-muted">View/Search Parents</h6>
   </div>
-  <div class="page-btn">
-    <a class="btn btn-added" data-bs-toggle="modal" data-bs-target="#parentModal">
-      <img src="assets/img/icons/plus.svg" class="me-1" alt="img">Add Parent
-    </a>
+  <div class="page-btn mt-2 mt-md-0">
+    <button class="btn btn-primary btn-sm shadow-sm rounded-3" data-bs-toggle="modal" data-bs-target="#parentModal">
+      <i class="bi bi-plus-circle me-1"></i> Add Parent
+    </button>
   </div>
 </div>
 
-<div class="card">
+<!-- CARD -->
+<div class="card shadow-sm border-0 rounded-4">
   <div class="card-body">
-    <div class="table-top">
-      <div class="search-set">
-        <div class="search-path">
-          <a class="btn btn-filter" id="filter_search">
-            <img src="assets/img/icons/filter.svg" alt="img">
-            <span><img src="assets/img/icons/closes.svg" alt="img"></span>
-          </a>
-        </div>
-        <div class="search-input">
-          <a class="btn btn-searchset">
-            <img src="assets/img/icons/search-white.svg" alt="img">
-          </a>
-        </div>
+
+    <!-- Table Top: Search & Filter -->
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+      <div class="d-flex align-items-center mb-2">
+        
       </div>
+       <div class="input-group mb-2" style="max-width: 250px;">
+  <input type="text" class="form-control form-control-sm shadow-sm"
+         placeholder="Search Parent" [(ngModel)]="searchText" (input)="filterParents()">
+  <button class="btn btn-primary btn-sm" (click)="filterParents()">
+    <i class="bi bi-search"></i>
+  </button>
+</div>
+
     </div>
 
+    <!-- Table -->
     <div class="table-responsive">
-      <table class="table datanew">
-        <thead>
+      <table class="table table-hover table-striped align-middle text-center mb-0 shadow-sm rounded-3">
+        <thead class="table-light">
           <tr>
             <th>Nom et Prénom</th>
             <th>Relation</th>
+            <th>CIN</th>
             <th>Adresse</th>
-            <th>Téléphone</th>
+            <th>Téléphone Principal</th>
+            <th>Téléphone Secondaire</th>
             <th>Email</th>
-            <th>Enfants</th>
+            <th>Profession</th>
+            <th>Lieu Travail</th>
+            <th>Téléphone Travail</th>
+            <th>Contact Urgence Nom</th>
+            <th>Contact Urgence Tel</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let p of parents">
-            <td>{{ p.nom + ' ' + p.prenom }}</td>
+<tr *ngFor="let p of filteredParents">
+            <td class="fw-semibold">{{ p.nom + ' ' + p.prenom }}</td>
             <td>{{ p.relation }}</td>
+            <td>{{ p.cin }}</td>
             <td>{{ p.adresse }}</td>
             <td>{{ p.telPrincipal }}</td>
+            <td>{{ p.telSecondaire }}</td>
             <td>{{ p.email }}</td>
+            <td>{{ p.profession }}</td>
+            <td>{{ p.lieuTravail }}</td>
+            <td>{{ p.telTravail }}</td>
+            <td>{{ p.contactUrgenceNom }}</td>
+            <td>{{ p.contactUrgenceTel }}</td>
             <td>
-              <ul>
-                <li *ngFor="let e of p.enfants">
-                  {{ e.prenom + ' ' + e.nom }} ({{ e.groupe }})
-                </li>
-              </ul>
+              <span class="badge" [ngClass]="p.etat ? 'bg-primary' : 'bg-danger'">
+                {{ p.etat ? 'ACTIVATED' : 'DESACTIVATED' }}
+              </span>
             </td>
-            <td>
-              <span *ngIf="!p.etat" style="color: red;">DESACTIVATED</span>
-              <span *ngIf="p.etat" style="color: blue;">ACTIVATED</span>
+            <td class="d-flex justify-content-center gap-1">
+              <button class="btn btn-sm btn-outline-success" (click)="goToEnfantPage(p.id)" title="Add Enfant">
+                <i class="bi bi-plus-circle"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-warning" (click)="editParent(p)" title="Edit">
+                <i class="bi bi-pencil-square"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteParent(p.id)" title="Delete">
+                <i class="bi bi-trash"></i>
+              </button>
             </td>
-            <td>
-              <a class="me-3" href="javascript:void(0);" (click)="editParent(p)">
-                <img src="assets/img/icons/edit.svg" alt="img">
-              </a>
-              <a class="me-3 confirm-text" href="javascript:void(0);" (click)="deleteParent(p.id)">
-                <img src="assets/img/icons/delete.svg" alt="img">
-              </a>
-            </td>
+          </tr>
+          <tr *ngIf="parents.length === 0">
+            <td colspan="14" class="text-center fst-italic text-muted">No Parents Found</td>
           </tr>
         </tbody>
       </table>
     </div>
+
   </div>
 </div>
 
 <!-- Modal Add/Edit Parent -->
 <div class="modal fade" id="parentModal" tabindex="-1" aria-labelledby="parentModalTitle" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content shadow-lg rounded-4">
+      <div class="modal-header bg-primary text-white">
         <h5 class="modal-title" id="parentModalTitle">{{ isEdit ? 'Edit Parent' : 'Add Parent' }}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
         <form #form="ngForm" (ngSubmit)="saveParent(form)">
-          <div class="row">
+          <div class="row g-3">
+
             <div class="col-lg-6 col-sm-6 col-12">
-              <div class="form-group">
-                <label>Nom</label>
-                <input type="text" [(ngModel)]="parent.nom" name="nom" class="form-control" required>
-              </div>
+              <label class="form-label fw-semibold">Nom</label>
+              <input type="text" [(ngModel)]="parent.nom" name="nom" class="form-control shadow-sm" required>
             </div>
+
             <div class="col-lg-6 col-sm-6 col-12">
-              <div class="form-group">
-                <label>Prénom</label>
-                <input type="text" [(ngModel)]="parent.prenom" name="prenom" class="form-control" required>
-              </div>
+              <label class="form-label fw-semibold">Prénom</label>
+              <input type="text" [(ngModel)]="parent.prenom" name="prenom" class="form-control shadow-sm" required>
             </div>
+
             <div class="col-lg-6 col-sm-6 col-12">
-              <div class="form-group">
-                <label>Relation</label>
-                <select class="form-control" [(ngModel)]="parent.relation" name="relation" required>
-                  <option value="PERE">Père</option>
-                  <option value="MERE">Mère</option>
-                  <option value="TUTEUR">Tuteur</option>
-                </select>
-              </div>
+              <label class="form-label fw-semibold">Relation</label>
+              <select class="form-select shadow-sm" [(ngModel)]="parent.relation" name="relation" required>
+                <option value="PERE">Père</option>
+                <option value="MERE">Mère</option>
+                <option value="TUTEUR">Tuteur</option>
+              </select>
             </div>
+
             <div class="col-lg-6 col-sm-6 col-12">
-              <div class="form-group">
-                <label>Email</label>
-                <input type="email" [(ngModel)]="parent.email" name="email" class="form-control">
-              </div>
+              <label class="form-label fw-semibold">CIN</label>
+              <input type="text" [(ngModel)]="parent.cin" name="cin" class="form-control shadow-sm">
             </div>
+
             <div class="col-lg-6 col-sm-6 col-12">
-              <div class="form-group">
-                <label>Téléphone Principal</label>
-                <input type="text" [(ngModel)]="parent.telPrincipal" name="telPrincipal" class="form-control" required>
-              </div>
+              <label class="form-label fw-semibold">Adresse</label>
+              <input type="text" [(ngModel)]="parent.adresse" name="adresse" class="form-control shadow-sm">
             </div>
+
             <div class="col-lg-6 col-sm-6 col-12">
-              <div class="form-group">
-                <label>Adresse</label>
-                <input type="text" [(ngModel)]="parent.adresse" name="adresse" class="form-control">
-              </div>
+              <label class="form-label fw-semibold">Téléphone Principal</label>
+              <input type="text" [(ngModel)]="parent.telPrincipal" name="telPrincipal" class="form-control shadow-sm" required>
             </div>
-            <div class="col-lg-12">
-              <button type="submit" class="btn btn-primary me-2">
+
+            <div class="col-lg-6 col-sm-6 col-12">
+              <label class="form-label fw-semibold">Téléphone Secondaire</label>
+              <input type="text" [(ngModel)]="parent.telSecondaire" name="telSecondaire" class="form-control shadow-sm">
+            </div>
+
+            <div class="col-lg-6 col-sm-6 col-12">
+              <label class="form-label fw-semibold">Email</label>
+              <input type="email" [(ngModel)]="parent.email" name="email" class="form-control shadow-sm">
+            </div>
+
+            <div class="col-lg-6 col-sm-6 col-12">
+              <label class="form-label fw-semibold">Profession</label>
+              <input type="text" [(ngModel)]="parent.profession" name="profession" class="form-control shadow-sm">
+            </div>
+
+            <div class="col-lg-6 col-sm-6 col-12">
+              <label class="form-label fw-semibold">Lieu de Travail</label>
+              <input type="text" [(ngModel)]="parent.lieuTravail" name="lieuTravail" class="form-control shadow-sm">
+            </div>
+
+            <div class="col-lg-6 col-sm-6 col-12">
+              <label class="form-label fw-semibold">Téléphone Travail</label>
+              <input type="text" [(ngModel)]="parent.telTravail" name="telTravail" class="form-control shadow-sm">
+            </div>
+
+            <div class="col-lg-6 col-sm-6 col-12">
+              <label class="form-label fw-semibold">Contact Urgence Nom</label>
+              <input type="text" [(ngModel)]="parent.contactUrgenceNom" name="contactUrgenceNom" class="form-control shadow-sm">
+            </div>
+
+            <div class="col-lg-6 col-sm-6 col-12">
+              <label class="form-label fw-semibold">Contact Urgence Téléphone</label>
+              <input type="text" [(ngModel)]="parent.contactUrgenceTel" name="contactUrgenceTel" class="form-control shadow-sm">
+            </div>
+
+            <div class="col-lg-6 col-sm-6 col-12">
+              <label class="form-label fw-semibold">Status</label>
+              <select class="form-select shadow-sm" [(ngModel)]="parent.etat" name="etat">
+                <option [ngValue]="true">Activé</option>
+                <option [ngValue]="false">Désactivé</option>
+              </select>
+            </div>
+
+            <div class="col-12 mt-3 d-flex justify-content-end gap-2">
+              <button type="submit" class="btn btn-primary shadow-sm">
                 {{ isEdit ? 'Update Parent' : 'Add Parent' }}
               </button>
-              <button type="reset" class="btn btn-danger">Cancel</button>
+              <button type="reset" class="btn btn-outline-danger shadow-sm" data-bs-dismiss="modal">Cancel</button>
             </div>
+
           </div>
         </form>
       </div>
