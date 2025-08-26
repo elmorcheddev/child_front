@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
       this.authAdmin.setToken(data.token);
        
       if(data.utilisateur.etat == true) {
-        if(!this.adminService.rolesMatch(['PATIENT'])) {
+        if(!this.adminService.rolesMatch(['ADMIN'])) {
           // Success alert
           Swal.fire({
             icon: 'success',

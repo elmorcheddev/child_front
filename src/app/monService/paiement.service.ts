@@ -8,7 +8,7 @@ import { Paiement } from '../monClass/paiement';
   providedIn: 'root'
 })
 export class PaiementService {
-  private apiUrl = 'http://localhost:8080/api/paiements'; // ⚠️ adapte l'URL selon ton backend
+  private apiUrl = 'https://childrengard.onrender.com/api/paiements'; // ⚠️ adapte l'URL selon ton backend
 
   constructor(private http: HttpClient) { }
 

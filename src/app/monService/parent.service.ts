@@ -8,7 +8,7 @@ import { Parent } from '../monClass/parent';
 })
 export class ParentService {
 
-  private apiUrl = 'http://localhost:8080/api/parents'; // Spring Boot backend
+  private apiUrl = 'https://childrengard.onrender.com/api/parents'; // Spring Boot backend
 
   constructor(private http: HttpClient) {}
 
