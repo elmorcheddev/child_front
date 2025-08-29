@@ -7,7 +7,7 @@ import { Classe } from '../monClass/classe';
   providedIn: 'root'
 })
 export class ClasseService {
-  private apiUrl = 'https://childrengard.onrender.com/api/Classes';
+  private apiUrl = 'http://localhost:8080/api/Classes';
 
   constructor(private http: HttpClient) {}
 

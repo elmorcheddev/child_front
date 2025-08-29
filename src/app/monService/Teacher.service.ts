@@ -9,7 +9,7 @@ import { Teacher } from '../monClass/Teacher';
 })
 export class TeacherService {
 
-  private baseUrl = 'https://childrengard.onrender.com/api/teachers';
+  private baseUrl = 'http://localhost:8080/api/teachers';
 
   constructor(private http: HttpClient) { }
 

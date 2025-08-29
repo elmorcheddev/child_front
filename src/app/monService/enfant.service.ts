@@ -8,7 +8,7 @@ import { Enfant } from '../monClass/enfant';
 })
 export class EnfantService {
 
-  private baseUrl = 'https://childrengard.onrender.com/api/enfants'; // change si nécessaire
+  private baseUrl = 'http://localhost:8080/api/enfants'; // change si nécessaire
 
   constructor(private http: HttpClient) { }
 getListEnfants(): Observable<Enfant[]> {

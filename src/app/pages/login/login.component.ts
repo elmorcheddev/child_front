@@ -30,21 +30,22 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router, private adminService: AdminService, private authAdmin: AdminAuthService) {}
   ngOnInit(): void {
    }
- login(form: NgForm) {
-  console.log(form.value)
+login(form: NgForm) {
+  console.log(form.value);
+
   this.adminService.loginAdmin(form.value).subscribe(
     (data: any) => {
-      console.log(data)
+      console.log(data);
       this.authAdmin.setRoles(data.utilisateur.role.nomRoles);
       this.authAdmin.setToken(data.token);
-       
-      if(data.utilisateur.etat == true) {
-        if(!this.adminService.rolesMatch(['ADMIN'])) {
+
+      if (data.utilisateur.etat === true) {
+        if (!this.adminService.rolesMatch(['ADMIN'])) {
           // Success alert
           Swal.fire({
             icon: 'success',
             title: 'Bienvenue!',
-            text: `Bien venu ${data.utilisateur.email}`,
+            text: `Bienvenu ${data.utilisateur.email}`,
             timer: 2000,
             showConfirmButton: false
           }).then(() => {
@@ -54,15 +55,13 @@ export class LoginComponent implements OnInit {
           });
         } else {
           this.authAdmin.logout();
-          // Error alert
           Swal.fire({
             icon: 'error',
             title: 'Erreur',
-            text: "Vérifier votre nom d'utilisateur ou votre mot de passe."
+            text: "Vous n'avez pas la permission d'accéder."
           });
         }
       } else {
-        // Account disabled alert
         Swal.fire({
           icon: 'warning',
           title: 'Compte désactivé',
@@ -76,16 +75,34 @@ export class LoginComponent implements OnInit {
       }
     },
     (error: HttpErrorResponse) => {
+      console.error("Login error:", error);
+
       if (error.status === 403) {
-        // Error alert for invalid login
+        // Wrong credentials
         Swal.fire({
           icon: 'error',
           title: 'Erreur de connexion',
-          text: "Vérifier votre nom d'utilisateur ou votre mot de passe."
-        }).then(() => {
-          this.router.navigate(['/login']);
+          text: "Email ou mot de passe incorrect."
+        });
+      } else if (error.status === 0) {
+        // Server not reachable
+        Swal.fire({
+          icon: 'error',
+          title: 'Serveur indisponible',
+          text: "Le serveur ne répond pas. Vérifiez votre connexion."
+        });
+      } else {
+        // Generic error
+        Swal.fire({
+          icon: 'error',
+          title: 'Erreur',
+          text: "Une erreur est survenue. Veuillez réessayer."
         });
       }
+
+      // Make sure NO login happens
+      this.authAdmin.clear();
+      this.router.navigate(['/login']);
     }
   );
 }
